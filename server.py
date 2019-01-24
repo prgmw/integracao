@@ -6,23 +6,17 @@ app = Flask(__name__)
 import pyodbc
 import requests
 
-#Conecao com o banco
-cursor = configDatabase()
-
-def getCLientToken():
-    uri = "https://api.superlogica.net/v2/financeiro/clientes/token"
-    requests.post
-
-#Configura banco
-def configDatabase():
-    server = 'tcp:myserver.database.windows.net' 
-    database = 'mydb' 
-    username = 'myusername' 
-    password = 'mypassword' 
+# Fornece uma conexao com o sqlserver
+def getDatabaseConnection():
+    #SELECT @@SERVERNAME
+    server = 'paulo-G7-7588'
+    database= 'TestDB'
+    username = 'SA'
+    password = 'P4ul0m3d3!' 
     cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+server+';DATABASE='+database+';UID='+username+';PWD='+ password)
     return cnxn.cursor()
 
-# Exemplo para obter os clientes
+# Exemplo de requisicao GET para obter os clientes
 def getClients():
     uri = 'https://api.superlogica.net/v2/financeiro/clientes'
     header = {
@@ -30,8 +24,20 @@ def getClients():
         "app_token" : "<TOKEN>",
         "access_token" : "<TOKEN>"
         }
-    requests.get(uri, headers=header)
+    response = requests.get(uri, headers=header)
+
+# Teste simples com database
+def testeBanco():
+    #Conexao sqlserver
+    cursor = getDatabaseConnection()
+    
+    cursor.execute("SELECT * from Inventory;")
+    row = cursor.fetchone() 
+    while row: 
+        print (row)
+        row = cursor.fetchone()
+
 
 
 if __name__ == "__main__":
-    #app.run(host='0.0.0.0')    
+    testeBanco()    
