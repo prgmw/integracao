@@ -22,6 +22,8 @@
 
 11 - pip install pyodbc
 
+12 - sudo pip install requests
+
 
 # Iniciar Projeto
 
