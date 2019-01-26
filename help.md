@@ -6,11 +6,11 @@
 
 3 - sudo pip3 install virtualenv
 
-4 - mkdir <Seu-Workspace>/superlogica
+4 - mkdir <Seu-Workspace>/venv
 
-5 - virtualenv superlogica
+5 - virtualenv venv
 
-6 - source superlogica/bin/activate
+6 - source venv/bin/activate
 
 7 - pip install gunicorn flask
 
@@ -27,8 +27,8 @@
 
 # Iniciar Projeto
 
-1 - cd <Seu-Workspace>/superlogica
+1 - cd <Seu-Workspace>/venv
 
-2 - source superlogica/bin/activate
+2 - source venv/bin/activate
 
 
