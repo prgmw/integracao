@@ -1,4 +1,4 @@
-# Primeira Instalacao
+# Primeira Instalacão:
 
 1 - sudo apt-get update
 
@@ -6,7 +6,7 @@
 
 3 - sudo pip3 install virtualenv
 
-4 - mkdir <Seu-Workspace>/venv
+4 - mkdir <Seu-Workspace>
 
 5 - virtualenv venv
 
@@ -21,9 +21,9 @@
 10 - sudo pip install requests
 
 
-# Iniciar Projeto
+# Iniciar Projeto:
 
-1 - cd <Seu-Workspace>/venv
+1 - cd <Seu-Workspace>/
 
 2 - source venv/bin/activate
 
