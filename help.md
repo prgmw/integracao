@@ -31,4 +31,6 @@
 
 2 - source venv/bin/activate
 
+3 - python job.py
+
 
