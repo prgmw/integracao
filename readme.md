@@ -12,17 +12,13 @@
 
 6 - source venv/bin/activate
 
-7 - pip install gunicorn flask
+7 - sudo apt-get install unixodbc-dev
 
-8 - pip install flask flask-jsonpify flask-sqlalchemy flask-restful
+8 - sudo apt-get install python-pip
 
-9 - sudo apt-get install unixodbc-dev
+9 - pip install pyodbc
 
-10 - sudo apt-get install python-pip
-
-11 - pip install pyodbc
-
-12 - sudo pip install requests
+10 - sudo pip install requests
 
 
 # Iniciar Projeto
