@@ -6,11 +6,17 @@
 
 3 - sudo pip3 install virtualenv
 
-4 - mkdir <Seu-Workspace>
+## Linux:
 
 5 - virtualenv venv
 
 6 - source venv/bin/activate
+
+## Windows:
+
+5 - virtualenv venv
+
+6 - venv\Scripts\activate
 
 7 - sudo apt-get install unixodbc-dev
 
