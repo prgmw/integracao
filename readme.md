@@ -1,3 +1,9 @@
+# Requisitos:
+
+```
+Python 3
+```
+
 # Primeira Instalacão:
 
 1 - sudo apt-get update
@@ -27,6 +33,11 @@
 
 2 - source venv/bin/activate
 
-3 - python job.py
+3 - cd src
 
+3 - python job.py << parametros >>
 
+## Parametros:
+- Rodar para a data atual => python job.py
+- Rodar para uma data especifica  => python job.py mm/dd/YYYY
+- Rodar para um intervalo de datas (data inicial e data final)  => python job.py mm/dd/YYYY mm/dd/YYYY
