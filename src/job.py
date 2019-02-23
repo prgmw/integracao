@@ -5,8 +5,8 @@ import re
 from datetime import date
 import threading
 
-import clientRestService
-import clientDao
+from service.clientRestService import ClientRestService
+from dao.clientDao import ClienteDao
 
 class job:
 
@@ -18,7 +18,7 @@ class job:
     def processar(self, dataExecucao):
         print ('Iniciando o processamento para período ' + dataExecucao) 
 
-        dao = clientDao.clienteDao()
+        dao = ClienteDao()
         dao.limpar_tabelas(dataExecucao)
 
         chamadas = [self._processa_clientes_adimplentes, self._processa_clientes_inadimplentes]
@@ -35,8 +35,10 @@ class job:
         clientesAdimplentes = []
         print('Obtendo os adimplentes...')
 
-        dao = clientDao.clienteDao()
-        service = clientRestService.ClientRestService()
+        # criando um objeto ClienteDao
+        dao = ClienteDao()
+        # criando um objeto ClienteRestService
+        service = ClientRestService()
 
         condicao = True
         pagina = 0
@@ -62,8 +64,10 @@ class job:
         clientes_inadimplentes = []
         print('Obtendo os inadimplentes...')
 
-        dao = clientDao.clienteDao()
-        service = clientRestService.ClientRestService()
+        # criando um objeto ClienteDao
+        dao = ClienteDao()
+        # criando um objeto ClienteRestService
+        service = ClientRestService()
 
         condicao = True
         pagina = 0
@@ -90,8 +94,14 @@ class job:
                 for encargo in recebimento['encargos']:
                     dao.incluir_encargos_recebimentos(encargo, recebimento['id_recebimento_recb'], dataExecucao)
 
+#Inicio
 if __name__ == "__main__":
-    dataExecucao = sys.argv[1]
+    #Obtém data passada por parâmetro
+    parametros = sys.argv
+
+    #Se não foi passada a data por parâmetro, então usa a data atual
+    dataExecucao = parametros[1] if len(parametros) == 2 else date.today().strftime('%m/%d/%Y')
+
     job = job()
-    data = dataExecucao if dataExecucao else date.today().strftime('%m/%d/%Y')
-    job.processar(data)
+
+    job.processar(dataExecucao)
