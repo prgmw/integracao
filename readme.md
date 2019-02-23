@@ -12,12 +12,6 @@
 
 6 - source venv/bin/activate
 
-## Windows:
-
-5 - virtualenv venv
-
-6 - venv\Scripts\activate
-
 7 - sudo apt-get install unixodbc-dev
 
 8 - sudo apt-get install python-pip
