@@ -2,7 +2,8 @@
 
 import sys
 import re
-from datetime import date
+
+from datetime import date, timedelta, datetime
 import threading
 
 from service.clientRestService import ClientRestService
@@ -10,28 +11,33 @@ from dao.clientDao import ClienteDao
 
 class job:
 
+    # Define o numero de jobs iniciais sendo:
+    # Numero de threads iniciais x numero de chamadas por endpoint (cada endpoint tem uma thread)
+    # Aumentar com cautela para evitar erros e travamentos
+    threadLimiter = threading.BoundedSemaphore(2)
+
     # Construtor
     def __init__(self):
         print('Iniciando o Job')
 
     # Realiza o processamento dos clientes
-    def processar(self, dataExecucao):
-        print ('Iniciando o processamento para período ' + dataExecucao) 
+    def processar(self, data_exec):
+        print ('Iniciando o processamento para período ' + data_exec) 
 
         dao = ClienteDao()
-        dao.limpar_tabelas(dataExecucao)
+        dao.limpar_tabelas(data_exec)
 
         chamadas = [self._processa_clientes_adimplentes, self._processa_clientes_inadimplentes]
 
         threads = []
         for metodo in chamadas:
-            t = threading.Thread(target=metodo, args=(dataExecucao,))
+            t = threading.Thread(target=metodo, args=(data_exec,))
             threads.append(t)
             t.start()
             print ('Iniciando uma Thread...')
 
     # Processa os clientes adimplentes
-    def _processa_clientes_adimplentes(self, dataExecucao):
+    def _processa_clientes_adimplentes(self, data_exec):
         clientesAdimplentes = []
         print('Obtendo os adimplentes...')
 
@@ -48,7 +54,7 @@ class job:
             print('Requisitando...')
 
             pagina += 1
-            aux = service.get_clientes_adimplentes(pagina, dataExecucao)
+            aux = service.get_clientes_adimplentes(pagina, data_exec)
             clientesAdimplentes += aux
             condicao = (len(aux) == 150)
 
@@ -57,10 +63,10 @@ class job:
         print('Existem ' + str(len(clientesAdimplentes)) + ' adimplentes para inserir')
 
         for cliente in clientesAdimplentes:
-            dao.incluir_cliente_adimplente(cliente, dataExecucao)
+            dao.incluir_cliente_adimplente(cliente, data_exec)
 
     # Processa os clientes inadimplentes
-    def _processa_clientes_inadimplentes(self, dataExecucao):
+    def _processa_clientes_inadimplentes(self, data_exec):
         clientes_inadimplentes = []
         print('Obtendo os inadimplentes...')
 
@@ -77,7 +83,7 @@ class job:
             print('Requisitando...')
 
             pagina += 1
-            aux = service.get_clientes_inadimplentes(pagina, dataExecucao)
+            aux = service.get_clientes_inadimplentes(pagina, data_exec)
             clientes_inadimplentes += aux
             condicao = (len(aux) == 150)
 
@@ -86,22 +92,53 @@ class job:
         print('Existem ' + str(len(clientes_inadimplentes)) + ' inadimplentes para inserir')
 
         for cliente in clientes_inadimplentes:
-            dao.incluir_cliente_inadimplente(cliente, dataExecucao)
+            dao.incluir_cliente_inadimplente(cliente, data_exec)
 
             for recebimento in cliente['recebimento']:
-                dao.incluir_recebimentos_pendentes(recebimento, cliente['id_sacado_sac'], dataExecucao)    
+                dao.incluir_recebimentos_pendentes(recebimento, cliente['id_sacado_sac'], data_exec)    
 
                 for encargo in recebimento['encargos']:
-                    dao.incluir_encargos_recebimentos(encargo, recebimento['id_recebimento_recb'], dataExecucao)
+                    dao.incluir_encargos_recebimentos(encargo, recebimento['id_recebimento_recb'], data_exec)
+
+    # Semaforo para controlar o numero de threads ativas por periodo
+    def _run(self, data_exec):
+        self.threadLimiter.acquire()
+        try:
+            print('>>>> Thread ' + str(data_exec) + ' Iniciada')
+            self.processar(str(data_exec))
+        finally:
+            print('>>>> Thread Liberada')
+            self.threadLimiter.release()                    
+
+    # Cria as threads
+    def _create_threads(self, periodo):
+        for data_exec in periodo:
+            t = threading.Thread(target=self._run, args=(data_exec,))
+            t.start()
 
 #Inicio
 if __name__ == "__main__":
+    periodo = []
+
+    DATE_PATTERN = '%m/%d/%Y'
+
     #Obtém data passada por parâmetro
     parametros = sys.argv
 
-    #Se não foi passada a data por parâmetro, então usa a data atual
-    dataExecucao = parametros[1] if len(parametros) == 2 else date.today().strftime('%m/%d/%Y')
+    #Se passou apenas uma data
+    if (len(parametros) == 2):
+        periodo.append(datetime.strptime(str(parametros[1]), DATE_PATTERN))
+    
+    #Se passou um periodo
+    elif (len(parametros) == 3):
+        data_inicial = datetime.strptime(str(parametros[1]), DATE_PATTERN)
+        data_final   = datetime.strptime(str(parametros[2]), DATE_PATTERN)
 
-    job = job()
+        # Popula o array com o range de datas
+        periodo = [ data_inicial + timedelta(n) for n in range(int ((data_final - data_inicial).days))]
 
-    job.processar(dataExecucao)
+    else:
+        periodo.append(date.today().strftime(DATE_PATTERN))
+
+    #Inicia o processo
+    job()._create_threads(periodo)

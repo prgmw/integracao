@@ -7,7 +7,7 @@ from datetime import date
 class BaseDao:
 
     # Dados Acesso ao banco
-    server = 'localhost'
+    server = ''
     database = ''
     username = ''
     password = ''
