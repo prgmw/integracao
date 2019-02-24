@@ -9,7 +9,7 @@ SQL Server Database
 
 1 - sudo apt-get update
 
-2 - sudo apt-get install python3-pip python3-dev nginx
+2 - sudo apt-get install python3-pip python3-dev
 
 3 - sudo pip3 install virtualenv
 
@@ -19,16 +19,16 @@ SQL Server Database
 
 6 - Instalar o driver do banco => ( https://docs.microsoft.com/pt-br/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017 )
 
-7 - sudo apt-get install python-pip
+7 - pip3 install pyodbc
 
-8 - pip install pyodbc
+8 - pip3 install requests
 
-9 - pip install requests
+9 - Execute o(s) script(s) SQL contidos na pasta **SQL** no banco de dados.
 
 
 # Iniciar Projeto:
 
-1 - cd <Seu-Workspace>/
+1 - cd << Seu-Workspace >> /
 
 2 - source venv/bin/activate
 
