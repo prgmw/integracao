@@ -17,7 +17,7 @@ class ClientRestService(BaseRestService):
     # Método que obtem os clientes adimplentes.
     def get_clientes_adimplentes_customizado(self, pagina, itensPagina, dataExecucao):
         uri = self.API_URI + 'financeiro/clientes/adimplentes?pagina=' + str(pagina) + ' & itensPorPagina=' + str(itensPagina) + ' & posicaoEm=' + str(dataExecucao)  
-        return self.obter_conteudo(uri, pagina)
+        return self.obter_conteudo(uri)
 
     # Método que obtem os clientes inadimplentes
     def get_clientes_inadimplentes(self, pagina, dataExecucao):
@@ -26,5 +26,5 @@ class ClientRestService(BaseRestService):
     # Método que obtem os clientes inadimplentes
     def get_clientes_inadimplentes_customizado(self, pagina, itensPagina, dataExecucao):
         uri = self.API_URI + 'financeiro/clientes/inadimplencia?pagina=' + str(pagina) + ' & itensPorPagina=' + str(itensPagina) + ' & posicaoEm=' + str(dataExecucao) 
-        return self.obter_conteudo(uri, pagina)    
+        return self.obter_conteudo(uri)    
 

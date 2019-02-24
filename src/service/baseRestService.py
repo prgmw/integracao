@@ -11,6 +11,7 @@ class BaseRestService:
     # Constantes
     API_URI = "https://api.superlogica.net/v2/"
     ITENS_PAGINA = 150
+    QUANTIDADE_MESES = 1
 
     #Construtor
     def __init__(self):
@@ -29,10 +30,11 @@ class BaseRestService:
         }
 
     # Método para requisicoes GET
-    def obter_conteudo(self, uri, pagina):
+    def obter_conteudo(self, uri):
         content = []
         response = requests.get(uri, headers=self.get_header())
 
         if response.status_code == 200:
             content = json.loads(response.content)
         return content
+  

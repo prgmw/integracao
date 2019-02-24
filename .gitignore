@@ -1,2 +1,5 @@
 venv/*
 .idea/*
+__pycache__/*
+src/dao/__pycache__/*
+src/service/__pycache__/*

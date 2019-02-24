@@ -7,13 +7,15 @@ from datetime import date, timedelta, datetime
 import threading
 
 from service.clientRestService import ClientRestService
+from service.metricasRestService import MetricasRestService
 from dao.clientDao import ClienteDao
+from dao.metricasDao import MetricasDao
 
 class job:
 
-    # Define o numero de jobs iniciais sendo:
-    # Numero de threads iniciais x numero de chamadas por endpoint (cada endpoint tem uma thread)
-    # Aumentar com cautela para evitar erros e travamentos
+    # Define o número de jobs iniciais sendo:
+    # Número de threads iniciais x número de chamadas por endpoint (cada endpoint tem uma thread)
+    # Aumentar com cautela para evitar sobrecarga e travamentos no banco e servidor
     threadLimiter = threading.BoundedSemaphore(2)
 
     # Construtor
@@ -24,17 +26,37 @@ class job:
     def processar(self, data_exec):
         print ('Iniciando o processamento para período ' + data_exec) 
 
-        dao = ClienteDao()
-        dao.limpar_tabelas(data_exec)
+        metricasDao = MetricasDao()
+        metricasDao.limpar_tabelas(data_exec)
 
-        chamadas = [self._processa_clientes_adimplentes, self._processa_clientes_inadimplentes]
+        clientesDao = ClienteDao()
+        clientesDao.limpar_tabelas(data_exec)
+
+        chamadas = [self._processar_metricas, self._processa_clientes_adimplentes, self._processa_clientes_inadimplentes]
 
         threads = []
         for metodo in chamadas:
             t = threading.Thread(target=metodo, args=(data_exec,))
             threads.append(t)
             t.start()
-            print ('Iniciando uma Thread...')
+
+    def _processar_metricas(self, data_exec):
+        metricas = ''
+        print('Obtendo as métricas...')
+
+        #criando um objeto MetricasDao
+        dao = MetricasDao()
+        dao.limpar_tabelas(data_exec)
+
+        # criando um objeto MetricasRestServices
+        service = MetricasRestService()
+        # Obtendo sa métrica na superlógica
+        metricas = service.get_metricas(data_exec)
+
+        for metrica in metricas:
+            #Salvando no banco de dados
+            dao.incluir_metrica(metrica, data_exec)
+
 
     # Processa os clientes adimplentes
     def _processa_clientes_adimplentes(self, data_exec):

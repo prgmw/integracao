@@ -25,7 +25,16 @@ class ClienteDao(BaseDao):
 
         print('Inserindo Cliente Adimplente >> ' + nomeCliente)
 
-        sql = "INSERT INTO SL_CLI_ADIMPLENTES (cliente_id, nome, dia_vencimento, dt_cadastro, dt_congelamento, dt_desativacao, dt_processamento) values ( ? , ?, ?, ?, ?, ?, ?)"
+        sql = (
+            "INSERT INTO SL_CLI_ADIMPLENTES ( "
+                " cliente_id, " 
+                " nome, "
+                " dia_vencimento, "
+                " dt_cadastro, "
+                " dt_congelamento, "
+                " dt_desativacao, "
+                " dt_processamento) "
+            " values ( ? , ?, ?, ?, ?, ?, ?)")
 
         cursor.execute(sql, 
             cliente['id_sacado_sac'], 
@@ -50,7 +59,16 @@ class ClienteDao(BaseDao):
 
         print('Inserindo Cliente Inadimplente >> ' + nomeCliente)
 
-        sql = "INSERT INTO SL_CLI_INADIMPLENTES (cliente_id, nome, dia_vencimento, dt_cadastro, dt_congelamento, dt_desativacao, dt_processamento) values ( ? , ?, ?, ?, ?, ?, ?)"
+        sql = (
+            "INSERT INTO SL_CLI_INADIMPLENTES ( "
+                " cliente_id, "
+                " nome, " 
+                " dia_vencimento, " 
+                " dt_cadastro, " 
+                " dt_congelamento, " 
+                " dt_desativacao, " 
+                " dt_processamento) "
+            " values ( ? , ?, ?, ?, ?, ?, ?)")
 
         cursor.execute(sql, 
             cliente['id_sacado_sac'], 
@@ -70,7 +88,13 @@ class ClienteDao(BaseDao):
         
         print('Inserindo Encargos dos Recebimentos >> ' + recebimento_id)
 
-        sql = "INSERT INTO SL_CLI_RECEBIMENTOS_ENCARGOS (recebimento_id, valor_corrigido, dias_atraso, dt_processamento) values (?,?,?,?)"
+        sql = (
+            "INSERT INTO SL_CLI_RECEBIMENTOS_ENCARGOS ("
+                " recebimento_id, " 
+                " valor_corrigido, "
+                " dias_atraso, "
+                " dt_processamento) "
+            " values (?,?,?,?)")
 
         cursor.execute(sql, 
             recebimento_id,
@@ -90,7 +114,15 @@ class ClienteDao(BaseDao):
 
         print('Inserindo Recebimentos do cliente >> ' + cliente_id)
 
-        sql = "INSERT INTO SL_CLI_INADIMPLENTES_RECEBIMENTOS (cliente_id, recebimento_id, dt_geracao, dt_vencimento, valor, dt_processamento) values (?,?,?,?,?,?)"
+        sql =  (
+            "INSERT INTO SL_CLI_INADIMPLENTES_RECEBIMENTOS ("
+                " cliente_id, "
+                " recebimento_id, "
+                " dt_geracao, " 
+                " dt_vencimento, "
+                " valor, "
+                " dt_processamento) "
+            " values (?,?,?,?,?,?)")
 
         cursor.execute(sql,
                         cliente_id,

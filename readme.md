@@ -2,6 +2,7 @@
 
 ```
 Python 3
+SQL Server Database
 ```
 
 # Primeira Instalacão:
@@ -12,19 +13,17 @@ Python 3
 
 3 - sudo pip3 install virtualenv
 
-## Linux:
+4 - virtualenv venv
 
-5 - virtualenv venv
+5 - source venv/bin/activate
 
-6 - source venv/bin/activate
+6 - Instalar o driver do banco => ( https://docs.microsoft.com/pt-br/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017 )
 
-7 - sudo apt-get install unixodbc-dev
+7 - sudo apt-get install python-pip
 
-8 - sudo apt-get install python-pip
+8 - pip install pyodbc
 
-9 - pip install pyodbc
-
-10 - sudo pip install requests
+9 - pip install requests
 
 
 # Iniciar Projeto:
